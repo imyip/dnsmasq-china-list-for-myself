@@ -43,7 +43,7 @@ jobs:
       #     script: docker restart smartdns
 
       - name: Add global nameserver
-        run: sed '1i\tls://1.1.1.1\ntls://dns.google\nquic://unfiltered.adguard-dns.com\ntls://dns10.quad9.net\ntls://dns.umbrella.com' ./accelerated-domains.china.adguardhome.conf > ./dns.conf
+        run: sed '1i\tls://1.1.1.1\ntls://dns.google\nquic://comss.dns.controld.com\nquic://doh.tiar.app\ntls://dns.umbrella.com' ./accelerated-domains.china.adguardhome.conf > ./dns.conf
 
       - name: Copy file to the server 
         uses: appleboy/scp-action@master
