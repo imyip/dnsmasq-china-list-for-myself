@@ -35,7 +35,7 @@ jobs:
           cd /workdir
           ./sing-box-bin/sing-box rule-set compile --output reject.srs reject.json
           ./sing-box-bin/sing-box rule-set compile --output download.srs download.json
-          tail -n +6 dns.conf | grep -v 'udp://10.10.1.1:53' > dns_mapping_adguardhome_filtered.conf
+          tail -n +6 dns.conf | grep -v 'udp://10.10.1.1:53' > dns_mapping_adguardhome.conf
 
       - name: Checkout
         uses: actions/checkout@master
