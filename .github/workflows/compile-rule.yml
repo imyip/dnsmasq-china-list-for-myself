@@ -1,0 +1,57 @@
+name: Compile Sing-box Rule Sets
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  compile-rule:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y wget tar
+
+      - name: Download sing-box (Linux)
+        run: |
+          cd /workdir
+          wget https://github.com/SagerNet/sing-box/releases/download/v1.11.15/sing-box-1.11.15-linux-amd64.tar.gz -O sing-box.tar.gz
+          mkdir sing-box-bin
+          tar -xzf sing-box.tar.gz -C sing-box-bin
+          chmod +x sing-box-bin/sing-box
+
+      - name: Download rule JSON files
+        run: |
+          cd /workdir
+          wget https://ruleset.skk.moe/sing-box/domainset/reject.json -O reject.json
+          wget https://ruleset.skk.moe/sing-box/domainset/download.json -O download.json
+
+      - name: Compile rule sets
+        run: |
+          cd /workdir
+          ./sing-box-bin/sing-box rule-set compile --output reject.srs reject.json
+          ./sing-box-bin/sing-box rule-set compile --output download.srs download.json
+
+      - name: Checkout
+        uses: actions/checkout@master
+        with:
+           token: ${{ secrets.PAT_TOKEN  }}
+  
+      - name: Copy files
+        run: cp -rf /workdir/*.srs ./
+        
+      - name: Add & Commit
+        uses: EndBug/add-and-commit@v9.1.4
+              
+      - name: Delete workflow runs
+        uses: Mattraks/delete-workflow-runs@v2
+        with:
+          token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          retain_days: 1
+          keep_minimum_runs: 2
