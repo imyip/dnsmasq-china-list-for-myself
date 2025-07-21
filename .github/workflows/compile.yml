@@ -11,11 +11,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Install dependencies
-        run: sudo apt-get update && sudo apt-get install -y wget tar
+    
+      - name: Initialization environment
+        run: sudo -E apt -qq update && sudo -E apt -qq install make && sudo mkdir -p /workdir && sudo chown $USER:$GROUPS /workdir
 
       - name: Download sing-box (Linux)
         run: |
