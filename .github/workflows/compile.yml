@@ -21,6 +21,7 @@ jobs:
           wget https://github.com/SagerNet/sing-box/releases/download/v1.11.15/sing-box-1.11.15-linux-amd64.tar.gz -O sing-box.tar.gz
           mkdir sing-box-bin
           tar -xzf sing-box.tar.gz -C sing-box-bin
+          mv sing-box-bin/sing-box-1.11.15-linux-amd64/sing-box sing-box-bin/
           chmod +x sing-box-bin/sing-box
 
       - name: Download rule JSON files
