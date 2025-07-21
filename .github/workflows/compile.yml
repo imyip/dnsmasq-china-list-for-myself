@@ -28,12 +28,14 @@ jobs:
           cd /workdir
           wget https://ruleset.skk.moe/sing-box/domainset/reject.json -O reject.json
           wget https://ruleset.skk.moe/sing-box/domainset/download.json -O download.json
+          wget https://ruleset.skk.moe/Internal/dns_mapping_adguardhome.conf -O dns.conf
 
       - name: Compile rule sets
         run: |
           cd /workdir
           ./sing-box-bin/sing-box rule-set compile --output reject.srs reject.json
           ./sing-box-bin/sing-box rule-set compile --output download.srs download.json
+          tail -n +6 dns.conf | grep -v 'udp://10.10.1.1:53' > dns_mapping_adguardhome_filtered.conf
 
       - name: Checkout
         uses: actions/checkout@master
@@ -41,7 +43,9 @@ jobs:
            token: ${{ secrets.PAT_TOKEN  }}
   
       - name: Copy files
-        run: cp -rf /workdir/*.srs ./
+        run: |
+          cp -rf /workdir/*.srs ./
+          cp -rf /workdir/dns_mapping_adguardhome.conf ./
         
       - name: Add & Commit
         uses: EndBug/add-and-commit@v9.1.4
